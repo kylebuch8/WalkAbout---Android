@@ -1,8 +1,14 @@
 package com.kristyandkyle.walkabout.ui.walk;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +27,7 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 	private long mStartTime = 0;
 	private long mPauseTime = 0;
 	private long mTotalDuration = 0;
+	private int notifyID = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstance) {
@@ -78,6 +85,8 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 		handler.removeCallbacks(runnable);
 		
 		btnStartStop.setText("Start Walking");
+		
+		hideNotification();
 	}
 
 	protected void startTimer() {
@@ -87,9 +96,34 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 		handler.post(runnable);
 		
 		btnStartStop.setText("Stop Walking");
+		
+		showNotification();
 	}
 	
+	private void showNotification() {
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+			.setSmallIcon(R.drawable.ic_menu_share)
+			.setContentTitle("WalkAbout")
+			.setContentText("You're Walking!!!")
+			.setOngoing(true);
+		
+		Intent resultIntent = new Intent(this, WalkActivity.class);
+		
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		stackBuilder.addNextIntent(resultIntent);
+		
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		mBuilder.setContentIntent(resultPendingIntent);
+		
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.notify(notifyID, mBuilder.build());
+	}
 	
+	private void hideNotification() {
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(notifyID);
+	}
 
 	@Override
 	public void onBackPressed() {
