@@ -105,6 +105,7 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 			.setSmallIcon(R.drawable.ic_menu_share)
 			.setContentTitle("WalkAbout")
 			.setContentText("You're Walking!!!")
+			.setTicker("Beginning WalkAbout...")
 			.setOngoing(true);
 		
 		Intent resultIntent = new Intent(this, WalkActivity.class);
