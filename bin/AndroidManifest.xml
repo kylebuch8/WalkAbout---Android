@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".ui.paths.PathsActivity" android:label="Paths"></activity>
         <activity android:label="Path" android:name=".ui.paths.PathActivity"></activity>
-        <activity android:label="Walk" android:name=".ui.walk.WalkActivity"></activity>
+        <activity android:label="Walk" android:name=".ui.walk.WalkActivity" android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>
