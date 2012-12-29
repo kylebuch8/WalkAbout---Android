@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,10 @@
         <activity android:name=".ui.paths.PathsActivity" android:label="Paths"></activity>
         <activity android:label="Path" android:name=".ui.paths.PathActivity"></activity>
         <activity android:label="Walk" android:name=".ui.walk.WalkActivity" android:launchMode="singleTop"></activity>
+        <provider 
+            android:name=".providers.WalkAboutContentProvider"
+            android:authorities="com.kristyandkyle.walkabout.WalkAbout"	
+            android:exported="false"/>
     </application>
 
 </manifest>

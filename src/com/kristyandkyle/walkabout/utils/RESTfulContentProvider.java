@@ -61,8 +61,7 @@ public abstract class RESTfulContentProvider extends ContentProvider {
 
         final HttpGet get = new HttpGet(url);
         ResponseHandler handler = newResponseHandler(requestTag);
-        requestTask = new UriRequestTask(requestTag, this, get,
-                handler, getContext());
+        requestTask = new UriRequestTask(requestTag, this, get, handler, getContext());
 
         mRequestsInProgress.put(requestTag, requestTask);
         return requestTask;

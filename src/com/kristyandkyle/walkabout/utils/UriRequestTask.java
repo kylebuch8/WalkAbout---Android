@@ -27,17 +27,11 @@ public class UriRequestTask implements Runnable {
     private int mRawResponse = -1;
 //    private int mRawResponse = R.raw.map_src;
 
-    public UriRequestTask(HttpUriRequest request,
-                          ResponseHandler handler, Context appContext)
-    {
+    public UriRequestTask(HttpUriRequest request, ResponseHandler handler, Context appContext) {
         this(null, null, request, handler, appContext);
     }
                                           
-    public UriRequestTask(String requestTag,
-                          RESTfulContentProvider siteProvider,
-                          HttpUriRequest request,
-                          ResponseHandler handler, Context appContext)
-    {
+    public UriRequestTask(String requestTag, RESTfulContentProvider siteProvider, HttpUriRequest request, ResponseHandler handler, Context appContext) {
         mRequestTag = requestTag;
         mSiteProvider = siteProvider;
         mRequest = request;
