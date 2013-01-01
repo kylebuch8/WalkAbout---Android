@@ -1,6 +1,5 @@
 package com.kristyandkyle.walkabout.ui.paths;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.kristyandkyle.walkabout.R;
@@ -44,10 +42,8 @@ public class PathsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		TextView textView = (TextView) v.findViewById(android.R.id.text1);
-		
 		Intent intent = new Intent(getSherlockActivity(), PathActivity.class);
-		intent.putExtra("pathName", textView.getText());
+		intent.putExtra("pathId", id);
 		startActivity(intent);
 	}
 
