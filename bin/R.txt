@@ -287,13 +287,13 @@ int id abs__textButton 0x7f040013
 int id abs__title 0x7f04001b
 int id abs__titleDivider 0x7f04001c
 int id abs__up 0x7f04000b
-int id content_new 0x7f04003a
+int id content_new 0x7f04003d
 int id disableHome 0x7f040009
 int id edit_query 0x7f040027
 int id fragment1 0x7f040036
 int id homeAsUp 0x7f040006
 int id listMode 0x7f040002
-int id menu_settings 0x7f040039
+int id menu_settings 0x7f04003c
 int id normal 0x7f040001
 int id pathFragment 0x7f040033
 int id pathFragment_btnStartWalk 0x7f040035
@@ -302,9 +302,12 @@ int id showCustom 0x7f040008
 int id showHome 0x7f040005
 int id showTitle 0x7f040007
 int id tabMode 0x7f040003
+int id textView1 0x7f04003a
 int id useLogo 0x7f040004
+int id walkActivity_btnSave 0x7f040039
 int id walkActivity_btnStartStop 0x7f040038
 int id walkActivity_txtTimer 0x7f040037
+int id walkCompletedActivity_btnDone 0x7f04003b
 int id wrap_content 0x7f040000
 int integer abs__max_action_buttons 0x7f080000
 int layout abs__action_bar_home 0x7f030000
@@ -339,6 +342,7 @@ int layout sherlock_spinner_dropdown_item 0x7f03001c
 int layout sherlock_spinner_item 0x7f03001d
 int layout test_fragment 0x7f03001e
 int layout walk_activity 0x7f03001f
+int layout walk_completed_activity 0x7f030020
 int menu activity_main 0x7f0b0000
 int menu home 0x7f0b0001
 int string abs__action_bar_home_description 0x7f090000

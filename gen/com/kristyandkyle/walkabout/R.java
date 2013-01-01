@@ -964,13 +964,13 @@ containing a value of this type.
         public static final int abs__title=0x7f04001b;
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
-        public static final int content_new=0x7f04003a;
+        public static final int content_new=0x7f04003d;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040027;
         public static final int fragment1=0x7f040036;
         public static final int homeAsUp=0x7f040006;
         public static final int listMode=0x7f040002;
-        public static final int menu_settings=0x7f040039;
+        public static final int menu_settings=0x7f04003c;
         public static final int normal=0x7f040001;
         public static final int pathFragment=0x7f040033;
         public static final int pathFragment_btnStartWalk=0x7f040035;
@@ -979,9 +979,12 @@ containing a value of this type.
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
+        public static final int textView1=0x7f04003a;
         public static final int useLogo=0x7f040004;
+        public static final int walkActivity_btnSave=0x7f040039;
         public static final int walkActivity_btnStartStop=0x7f040038;
         public static final int walkActivity_txtTimer=0x7f040037;
+        public static final int walkCompletedActivity_btnDone=0x7f04003b;
         public static final int wrap_content=0x7f040000;
     }
     public static final class integer {
@@ -1020,6 +1023,7 @@ containing a value of this type.
         public static final int sherlock_spinner_item=0x7f03001d;
         public static final int test_fragment=0x7f03001e;
         public static final int walk_activity=0x7f03001f;
+        public static final int walk_completed_activity=0x7f030020;
     }
     public static final class menu {
         public static final int activity_main=0x7f0b0000;
