@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.kristyandkyle.walkabout.R;
 import com.kristyandkyle.walkabout.ui.home.FeedFragment;
+import com.kristyandkyle.walkabout.ui.home.HistoryFragment;
 import com.kristyandkyle.walkabout.ui.paths.PathsActivity;
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -28,9 +29,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		
-		Log.d("WalkAbout", "onCreate Called");
-		
+				
 		Tab tab = actionBar.newTab()
 					.setText("Feed")
 					.setTabListener(new TabListener<FeedFragment>(this, "feed", FeedFragment.class));
@@ -39,7 +38,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		
 		tab = actionBar.newTab()
 				.setText("History")
-				.setTabListener(new TabListener<FeedFragment>(this, "history", FeedFragment.class));
+				.setTabListener(new TabListener<HistoryFragment>(this, "history", HistoryFragment.class));
 		
 		actionBar.addTab(tab);
 		
