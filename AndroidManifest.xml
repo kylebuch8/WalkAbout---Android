@@ -30,6 +30,7 @@
             android:name=".providers.WalkAboutContentProvider"
             android:authorities="com.kristyandkyle.walkabout.WalkAbout"	
             android:exported="false"/>
+        <activity android:name=".ui.walk.WalkCompletedActivity"></activity>
     </application>
 
 </manifest>
