@@ -5,11 +5,20 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+
+import com.kristyandkyle.walkabout.providers.WalkAbout;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +75,26 @@ public abstract class RESTfulContentProvider extends ContentProvider {
         mRequestsInProgress.put(requestTag, requestTask);
         return requestTask;
     }
+    
+    UriRequestTask newPostTask(String requestTag, String url, ContentValues values) {
+    	UriRequestTask requestTask;
+    	
+    	final HttpPost post = new HttpPost(url);
+    	
+    	try {
+    		final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+        	nameValuePairs.add(new BasicNameValuePair("duration", values.getAsString(WalkAbout.WalkAbouts.DURATION)));
+			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+    	
+    	ResponseHandler handler = newResponseHandler(requestTag);
+    	requestTask = new UriRequestTask(requestTag, this, post, handler, getContext());
+    	
+    	mRequestsInProgress.put(requestTag, requestTask);
+    	return requestTask;
+    }
 
     /**
      * Creates a new worker thread to carry out a RESTful network invocation.
@@ -84,6 +113,17 @@ public abstract class RESTfulContentProvider extends ContentProvider {
                 t.start();
             }
         }
+    }
+    
+    public void asyncPostRequest(String queryTag, String postUri, ContentValues values) {
+    	synchronized (mRequestsInProgress) {
+    		UriRequestTask requestTask = getRequestTask(queryTag);
+    		if (requestTask == null) {
+    			requestTask = newPostTask(queryTag, postUri, values);
+    			Thread t = new Thread(requestTask);
+    			t.start();
+    		}
+		}
     }
 
     /**
