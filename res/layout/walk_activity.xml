@@ -19,4 +19,11 @@
         android:layout_height="wrap_content"
         android:text="Start Walking" />
 
+    <Button
+        android:id="@+id/walkActivity_btnSave"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Walk"
+        android:visibility="invisible" />
+
 </LinearLayout>

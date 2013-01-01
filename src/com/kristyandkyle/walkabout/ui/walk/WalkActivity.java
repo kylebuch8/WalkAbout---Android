@@ -2,13 +2,19 @@ package com.kristyandkyle.walkabout.ui.walk;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,11 +22,15 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.kristyandkyle.walkabout.R;
+import com.kristyandkyle.walkabout.providers.WalkAbout;
 
-public class WalkActivity extends SherlockFragmentActivity implements CancelWalkDialogFragment.CancelWalkDialogListener {
+public class WalkActivity extends SherlockFragmentActivity implements CancelWalkDialogFragment.CancelWalkDialogListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
+	private static final int PATH_LIST_LOADER = 0x01;
+	private long mPathId;
 	private TextView txtTimer;
 	private Button btnStartStop;
+	private Button btnSave;
 	private Handler handler;
 	private Runnable runnable;
 	private Boolean isRunning = false;
@@ -34,6 +44,10 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 		super.onCreate(savedInstance);
 		setContentView(R.layout.walk_activity);
 		
+		// get the path from the database
+		mPathId = getIntent().getLongExtra("pathId", 0);
+		getSupportLoaderManager().initLoader(PATH_LIST_LOADER, null, this);
+		
 		txtTimer = (TextView) findViewById(R.id.walkActivity_txtTimer);
 		btnStartStop = (Button) findViewById(R.id.walkActivity_btnStartStop);
 		btnStartStop.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +59,25 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 				} else {
 					startTimer();
 				}
+			}
+		});
+		
+		btnSave = (Button) findViewById(R.id.walkActivity_btnSave);		
+		btnSave.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ContentValues values = new ContentValues();
+				values.put(WalkAbout.WalkAbouts.PATH_ID, mPathId);
+				values.put(WalkAbout.WalkAbouts.DURATION, mTotalDuration);
+				values.put(WalkAbout.WalkAbouts.TIMESTAMP, System.currentTimeMillis());
+				
+				Uri insertUri = getContentResolver().insert(WalkAbout.WalkAbouts.WALKABOUTS_URI, values);
+				String walkId = insertUri.getLastPathSegment();
+				
+				Intent intent = new Intent(getApplicationContext(), WalkCompletedActivity.class);
+				intent.putExtra("walkId", walkId);
+				startActivity(intent);
 			}
 		});
 		
@@ -85,6 +118,7 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 		handler.removeCallbacks(runnable);
 		
 		btnStartStop.setText("Start Walking");
+		btnSave.setVisibility(View.VISIBLE);
 		
 		hideNotification();
 	}
@@ -96,6 +130,7 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 		handler.post(runnable);
 		
 		btnStartStop.setText("Stop Walking");
+		btnSave.setVisibility(View.INVISIBLE);
 		
 		showNotification();
 	}
@@ -164,6 +199,23 @@ public class WalkActivity extends SherlockFragmentActivity implements CancelWalk
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
 		// do nothing
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		Uri uri = Uri.parse(WalkAbout.Paths.PATHS_URI + "/" + mPathId);
+		CursorLoader cursorLoader = new CursorLoader(this, uri, null, null, null, null);
+		return cursorLoader;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		cursor.moveToPosition(0);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		
 	}
 
 }
