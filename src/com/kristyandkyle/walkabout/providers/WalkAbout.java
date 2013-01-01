@@ -13,9 +13,15 @@ public class WalkAbout {
 		
 		public static final Uri WALKABOUTS_URI = Uri.parse("content://" + AUTHORITY + "/" + WalkAbouts.WALKABOUT_NAME);
 		
-		public static final String WALKABOUT_NAME = "walkabout";
+		public static final Uri CONTENT_URI = WALKABOUTS_URI;
 		
-		public static final String WALKABOUT = "walkabout";
+		public static final String WALKABOUT_NAME = "walkabouts";
+		
+		public static final String WALKABOUTS = "walkabouts";
+		
+		public static final String WALKABOUT = WalkAbout.WalkAbouts.WALKABOUTS + "/#";
+		
+		public static final String PATH_ID = "path_id";
 		
 		public static final String DURATION = "duration";
 		
@@ -35,6 +41,8 @@ public class WalkAbout {
 		public static final String PATHS_NAME = "paths";
 		
 		public static final String PATHS = "paths";
+		
+		public static final String PATH = WalkAbout.Paths.PATHS + "/#";
 		
 		public static final String ID = "id";
 		

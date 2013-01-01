@@ -43,6 +43,10 @@ public class WalkAboutHandler implements ResponseHandler {
 			if (mQueryText.equals("paths")) {
 				parsePaths(jsonResponse);
 			}
+			
+			if (mQueryText.equals("walkabouts")) {
+				parseWalkAbout(jsonResponse);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -68,6 +72,10 @@ public class WalkAboutHandler implements ResponseHandler {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void parseWalkAbout(JSONObject jsonResponse) {
+		
 	}
 
 }

@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 import com.kristyandkyle.walkabout.utils.FileHandlerFactory;
 import com.kristyandkyle.walkabout.utils.RESTfulContentProvider;
@@ -18,22 +19,26 @@ import com.kristyandkyle.walkabout.utils.ResponseHandler;
 public class WalkAboutContentProvider extends RESTfulContentProvider {
 	public static final String WALKABOUT = "walkabout";
     public static final String DATABASE_NAME = WALKABOUT + ".db";
-    static int DATABASE_VERSION = 3;
+    static int DATABASE_VERSION = 4;
 
-    public static final String WALKABOUTS_TABLE_NAME = "walkabout";
+    public static final String WALKABOUTS_TABLE_NAME = "walkabouts";
     public static final String PATHS_TABLE_NAME = "paths";
 	
 	private static final String FILE_CACHE_DIR = "/data/data/com.kristyandkyle.walkabout/file_cache";
 	
 	private static final int WALKABOUTS = 1;
-	private static final int PATHS = 2;
+	private static final int SPECIFIC_WALKABOUT = 2;
+	private static final int PATHS = 3;
+	private static final int SPECIFIC_PATH = 4;
 	
 	private static UriMatcher sUriMatcher;
 	
 	static {
 		sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sUriMatcher.addURI(WalkAbout.AUTHORITY, WalkAbout.WalkAbouts.WALKABOUT, WALKABOUTS);
+		sUriMatcher.addURI(WalkAbout.AUTHORITY, WalkAbout.WalkAbouts.WALKABOUTS, WALKABOUTS);
+		sUriMatcher.addURI(WalkAbout.AUTHORITY, WalkAbout.WalkAbouts.WALKABOUT, SPECIFIC_WALKABOUT);
 		sUriMatcher.addURI(WalkAbout.AUTHORITY, WalkAbout.Paths.PATHS, PATHS);
+		sUriMatcher.addURI(WalkAbout.AUTHORITY, WalkAbout.Paths.PATH, SPECIFIC_PATH);
 	}
 	
 	private DatabaseHelper mOpenHelper;
@@ -53,6 +58,7 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 		private void createTable(SQLiteDatabase db) {
 			String createWalkAboutTable = "CREATE TABLE " + WALKABOUTS_TABLE_NAME + "(" + 
 					BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					WalkAbout.WalkAbouts.PATH_ID + " TEXT, " +
 					WalkAbout.WalkAbouts.DURATION + " TEXT, " +
 					WalkAbout.WalkAbouts.TIMESTAMP + " TEXT, " +
 					WalkAbout.WalkAbouts._DATA + " TEXT UNIQUE" + 
@@ -124,6 +130,10 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 		int match = sUriMatcher.match(uri);
 		switch (match) {
 			case WALKABOUTS:
+				if (TextUtils.isEmpty(sortOrder)) {
+					sortOrder = "_id DESC";
+				}
+				
 				queryCursor = mDb.query(WALKABOUTS_TABLE_NAME,
 						projection,
 						selection,
@@ -132,8 +142,20 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 						null,
 						sortOrder);
 				
-				queryCursor.setNotificationUri(getContext().getContentResolver(), uri);
-				asyncQueryRequest("walkabout", "http://kristyandkyle.com/walkabout/assets/scripts/paths.json");
+				//queryCursor.setNotificationUri(getContext().getContentResolver(), uri);
+				//asyncQueryRequest("walkabout", "http://kristyandkyle.com/walkabout/assets/scripts/paths.json");
+				break;
+				
+			case SPECIFIC_WALKABOUT:
+				selection = "_id = " + uri.getLastPathSegment();
+				
+				queryCursor = mDb.query(WALKABOUTS_TABLE_NAME,
+						projection,
+						selection,
+						selectionArgs,
+						null,
+						null,
+						sortOrder);
 				break;
 			
 			case PATHS:
@@ -148,6 +170,18 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 				queryCursor.setNotificationUri(getContext().getContentResolver(), uri);
 				asyncQueryRequest("paths", "http://kristyandkyle.com/walkabout/assets/scripts/paths.json");
 				break;
+				
+			case SPECIFIC_PATH:
+				selection = "_id = " + uri.getLastPathSegment(); 
+				
+				queryCursor = mDb.query(PATHS_TABLE_NAME,
+						projection,
+						selection,
+						selectionArgs,
+						null,
+						null,
+						sortOrder);
+				break;
 	
 			default:
 				throw new IllegalArgumentException("unsupported uri");
@@ -158,7 +192,15 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 	
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		// TODO Auto-generated method stub
+		long rowId = mDb.insert(WALKABOUTS_TABLE_NAME, WalkAbout.WalkAbouts.WALKABOUTS, values);
+		
+		asyncPostRequest("walkabouts", "http://kristyandkyle.com/walkabout/somethingelse", values);
+		
+		if (rowId >= 0) {
+			Uri insertUri = ContentUris.withAppendedId(WalkAbout.WalkAbouts.CONTENT_URI, rowId);
+			return insertUri;
+		}
+		
 		return null;
 	}
 
