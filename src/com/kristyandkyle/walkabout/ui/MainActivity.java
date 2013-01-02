@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
@@ -18,6 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.kristyandkyle.walkabout.R;
 import com.kristyandkyle.walkabout.ui.home.FeedFragment;
 import com.kristyandkyle.walkabout.ui.home.HistoryFragment;
+import com.kristyandkyle.walkabout.ui.home.LeadersFragment;
 import com.kristyandkyle.walkabout.ui.paths.PathsActivity;
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -44,10 +44,22 @@ public class MainActivity extends SherlockFragmentActivity {
 		
 		tab = actionBar.newTab()
 				.setText("Leaders")
-				.setTabListener(new TabListener<FeedFragment>(this, "leaders", FeedFragment.class));
+				.setTabListener(new TabListener<LeadersFragment>(this, "leaders", LeadersFragment.class));
 		
 		actionBar.addTab(tab);
+		
+		if (savedInstanceState != null) {
+			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab"));
+		}
 	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
