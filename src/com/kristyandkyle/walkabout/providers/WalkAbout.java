@@ -1,5 +1,10 @@
 package com.kristyandkyle.walkabout.providers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -28,6 +33,24 @@ public class WalkAbout {
 		public static final String TIMESTAMP = "timestamp";
 		
 		public static final String _DATA = "_data";
+		
+		public static final String formatDuration(String duration) {
+			int seconds = (int) (Integer.parseInt(duration) / 1000);
+			int minutes = seconds / 60;
+			seconds = seconds % 60;
+			
+			String secondsText = (seconds < 10) ? "0" + seconds : "" + seconds;
+			String minutesText = (minutes < 10) ? "0" + minutes : "" + minutes;
+			
+			return minutesText + ":" + secondsText;
+		}
+		
+		public static final String formatTimestamp(String timestamp) {
+			Date date = new Date(Long.parseLong(timestamp));
+			DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm", Locale.US);
+			DateFormat amPmDateFormat = new SimpleDateFormat("a", Locale.US);
+			return dateFormat.format(date) + " " + amPmDateFormat.format(date).toLowerCase(Locale.US);
+		}
 	}
 	
 	public static final class Paths implements BaseColumns {
