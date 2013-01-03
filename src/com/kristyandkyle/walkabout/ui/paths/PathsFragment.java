@@ -26,11 +26,11 @@ public class PathsFragment extends SherlockListFragment implements LoaderManager
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		String[] uiBindFrom = { WalkAbout.Paths.NAME };
-		int[] uiBindTo = { android.R.id.text1 };
+		String[] uiBindFrom = { WalkAbout.Paths.NAME, WalkAbout.Paths.DISTANCE };
+		int[] uiBindTo = { android.R.id.text1, android.R.id.text2 };
 		
 		getActivity().getSupportLoaderManager().initLoader(PATHS_LIST_LOADER, null, this);
-		mAdapter = new SimpleCursorAdapter(getSherlockActivity(), android.R.layout.simple_list_item_1, null, uiBindFrom, uiBindTo, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		mAdapter = new SimpleCursorAdapter(getSherlockActivity(), android.R.layout.simple_list_item_2, null, uiBindFrom, uiBindTo, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 		setListAdapter(mAdapter);
 	}
 
