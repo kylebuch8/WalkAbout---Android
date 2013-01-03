@@ -54,4 +54,34 @@ public class WalkAbout {
 		
 	}
 	
+	public static final class Waypoints implements BaseColumns {
+
+		private Waypoints() {};
+		
+		public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + Waypoints.WAYPOINTS_NAME);
+		
+		public static final String WAYPOINTS_NAME = "waypoints";
+		
+		public static final String ID = "id";
+		
+		public static final String NAME = "name";
+		
+		public static final String PATH_ID = "path_id";
+		
+		public static final String LATITUDE = "latitude";
+		
+		public static final String LONGITUDE = "longitude";
+
+	}
+	
+	public static final class WalkAbouts_Waypoints implements BaseColumns {
+		
+		private WalkAbouts_Waypoints() {};
+		
+		public static final String WALKABOUT_ID = "walkabout_id";
+		
+		public static final String WAYPOINT_ID = "waypoint_id";
+		
+	}
+	
 }
