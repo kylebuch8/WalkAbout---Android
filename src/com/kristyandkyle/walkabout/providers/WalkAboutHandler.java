@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.kristyandkyle.walkabout.utils.RESTfulContentProvider;
@@ -69,6 +68,10 @@ public class WalkAboutHandler implements ResponseHandler {
 					pathEntry.put(WalkAbout.Paths.DISTANCE, path.getString("distance"));
 					
 					pathsContentValues[i] = pathEntry;
+					
+					//SQLiteDatabase db = mWalkAboutContentProvider.getDatabase();
+					//mWalkAboutContentProvider.insert(WalkAbout.Paths.PATHS_URI, pathEntry, db);
+					//Uri providerUri = mWalkAboutContentProvider.insert(WalkAbout.Paths.PATHS_URI, pathEntry, db);
 										
 					// loop through all of the waypoints
 					JSONArray waypoints = path.getJSONArray("waypoints");
@@ -84,6 +87,8 @@ public class WalkAboutHandler implements ResponseHandler {
 						waypointEntry.put(WalkAbout.Waypoints.LONGITUDE, waypoint.getString("longitude"));
 						
 						waypointsContentValuesArray.add(waypointEntry);
+						
+						//mWalkAboutContentProvider.insert(WalkAbout.Waypoints.CONTENT_URI, waypointEntry, db);
 					}
 				}
 				
