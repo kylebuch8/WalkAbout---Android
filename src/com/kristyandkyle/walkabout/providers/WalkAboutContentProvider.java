@@ -11,11 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.kristyandkyle.walkabout.utils.FileHandlerFactory;
 import com.kristyandkyle.walkabout.utils.RESTfulContentProvider;
@@ -38,6 +36,7 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 	private static final int PATHS = 3;
 	private static final int SPECIFIC_PATH = 4;
 	private static final int WAYPOINTS = 5;
+	private static final int WAYPOINTS_BY_PATH = 6;
 	
 	private static UriMatcher sUriMatcher;
 	
@@ -165,10 +164,9 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 				}
 				
 				SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+				
 				queryBuilder.setTables(WALKABOUTS_TABLE_NAME + " LEFT OUTER JOIN " + PATHS_TABLE_NAME + 
-						" ON " + WALKABOUTS_TABLE_NAME + "." + WalkAbout.WalkAbouts.PATH_ID + " = " + PATHS_TABLE_NAME + "." + WalkAbout.Paths.ID + 
-						" JOIN " + WAYPOINTS_TABLE_NAME +
-						" ON " + PATHS_TABLE_NAME + "." + WalkAbout.Paths.ID + " = " + WAYPOINTS_TABLE_NAME + "." + WalkAbout.Waypoints.PATH_ID);
+						" ON " + WALKABOUTS_TABLE_NAME + "." + WalkAbout.WalkAbouts.PATH_ID + " = " + PATHS_TABLE_NAME + "." + WalkAbout.Paths.ID);
 				
 				queryCursor = queryBuilder.query(mDb,
 						projection,
@@ -208,9 +206,21 @@ public class WalkAboutContentProvider extends RESTfulContentProvider {
 				break;
 				
 			case SPECIFIC_PATH:
-				selection = "_id = " + uri.getLastPathSegment(); 
+				selection = "id = " + uri.getLastPathSegment(); 
 				
 				queryCursor = mDb.query(PATHS_TABLE_NAME,
+						projection,
+						selection,
+						selectionArgs,
+						null,
+						null,
+						sortOrder);
+				break;
+				
+			case WAYPOINTS_BY_PATH:
+				selection = "id = " + uri.getLastPathSegment();
+				
+				queryCursor = mDb.query(WAYPOINTS_TABLE_NAME,
 						projection,
 						selection,
 						selectionArgs,
