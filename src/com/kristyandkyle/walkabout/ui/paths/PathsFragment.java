@@ -42,8 +42,22 @@ public class PathsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		// let's get the detail from the cursor
+		Cursor cursor = mAdapter.getCursor();
+		cursor.moveToPosition(position);
+		
+		long pathId = Long.parseLong(cursor.getString(cursor.getColumnIndex(WalkAbout.Paths.ID)));
+		String pathName = cursor.getString(cursor.getColumnIndex(WalkAbout.Paths.NAME));
+		String pathDistance = cursor.getString(cursor.getColumnIndex(WalkAbout.Paths.DISTANCE));
+		
+		/*
+		 * fill up the intent extras with the path information so we don't need to requery
+		 * the database in the next activity
+		 */
 		Intent intent = new Intent(getSherlockActivity(), PathActivity.class);
-		intent.putExtra("pathId", id);
+		intent.putExtra("pathId", pathId);
+		intent.putExtra("pathName", pathName);
+		intent.putExtra("pathDistance", pathDistance);
 		startActivity(intent);
 	}
 
