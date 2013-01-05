@@ -4,12 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/pathFragment_pathName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Path Fool"
-        android:textSize="20dp" />
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+	    <TextView
+	        android:id="@+id/pathFragment_pathName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Path Name"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <TextView
+	        android:id="@+id/pathFragment_pathDistance"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Path Distance"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+	    
+	    <View
+		    android:layout_width="fill_parent"
+		    android:layout_height="1dp"
+		    android:layout_margin="10dp"
+		    android:background="@android:color/darker_gray" />
+
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Waypoints" />
+	    
+    </LinearLayout>
 
     <Button
         android:id="@+id/pathFragment_btnStartWalk"
