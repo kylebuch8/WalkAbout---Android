@@ -17,14 +17,10 @@ import com.kristyandkyle.walkabout.providers.WalkAbout;
 
 public class PathFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 	
-	private static final int PATH_LOADER = 0;
-	private static final int WAYPOINTS_LOADER = 1;
-	
-	private Uri mPathUri = WalkAbout.Paths.PATHS_URI;
+	private static final int WAYPOINTS_LOADER = 0;	
 	private Uri mWaypointsUri = WalkAbout.Waypoints.CONTENT_URI;
-	
 	private TextView mTxtPathName;
-			
+	private TextView mTxtPathDistance;
 	private long mPathId;
 
 	@Override
@@ -33,35 +29,23 @@ public class PathFragment extends SherlockFragment implements LoaderManager.Load
 		
 		mPathId = getActivity().getIntent().getLongExtra("pathId", 0);
 		
-		getLoaderManager().initLoader(PATH_LOADER, null, this);
 		//getLoaderManager().initLoader(WAYPOINTS_LOADER, null, this);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.path_fragment, container, false);	
-		
-		mTxtPathName = (TextView) view.findViewById(R.id.pathFragment_pathName);
-		
+		updatePathView(view);
 		return view;
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		switch (id) {
-			case PATH_LOADER:
-				return new CursorLoader(getActivity(), 
-						Uri.parse(mPathUri + "/" + mPathId), 
-						null, 
-						null, 
-						null, 
-						null
-					);
-				
 			case WAYPOINTS_LOADER:
 				
 				return new CursorLoader(getActivity(),
-						mWaypointsUri,
+						Uri.parse(mWaypointsUri + "/" + mPathId),
 						null,
 						null,
 						null,
@@ -78,22 +62,26 @@ public class PathFragment extends SherlockFragment implements LoaderManager.Load
 		int loaderId = loader.getId();
 		
 		switch (loaderId) {
-			case PATH_LOADER:
-				updatePathView(cursor);
-				break;
-				
 			case WAYPOINTS_LOADER:
-				
+				updateWayPointsView(cursor);
 				break;
 	
 			default:
 				break;
 			}
 	}
+	
+	private void updatePathView(View view) {
+		mTxtPathName = (TextView) view.findViewById(R.id.pathFragment_pathName);
+		mTxtPathName.setText(getActivity().getIntent().getStringExtra("pathName"));
+		
+		mTxtPathDistance = (TextView) view.findViewById(R.id.pathFragment_pathDistance);
+		mTxtPathDistance.setText(getActivity().getIntent().getStringExtra("pathDistance"));
+	}
 
-	private void updatePathView(Cursor cursor) {
-		if (cursor.moveToFirst()) {
-			mTxtPathName.setText(cursor.getString(cursor.getColumnIndex(WalkAbout.Paths.NAME)));
+	private void updateWayPointsView(Cursor cursor) {
+		while (cursor.moveToNext()) {
+			
 		}
 	}
 
